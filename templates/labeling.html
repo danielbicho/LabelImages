@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Labeling Images</title>
+</head>
+<body>
+
+</body>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Labeling Images</title>
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <!-- Cabeçalho -->
+        <div id="top-nav" class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <h1>Images Labeling</h1>
+                </div>
+            </div>
+        </div>
+
+        <div calss="container">
+            {% if image_url %}
+            <div class="row container">
+                <div class="container col-sm-4">
+                    <img class="img-responsive" src={{ image_url }}>
+                </div>
+            </div>
+            <div class="row container" style="padding-top: 2%">
+                 <div class="container col-sm-4">
+                     <a href="/?label=SFW&url={{ image_url }}" class="btn btn-default">SFW</a>
+                     <a href="/?label=NSFW&url={{ image_url }}" class="btn btn-default">NSFW</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="row container">
+                <p class="col-sm-4">No more images</p>
+            </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
