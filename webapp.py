@@ -37,7 +37,7 @@ def init_writer():
 def search():
     query_form = QueryForm()
     if query_form.validate_on_submit():
-        g.reader = ImageReaderSolr(query_form.query.data)
+        g.reader = ImageReaderSolr(query=query_form.query.data)
 
         save_reader(g.reader)
 
