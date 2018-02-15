@@ -8,7 +8,14 @@ from form import QueryForm
 from labeler import LabelWriter, ImageReaderSolr
 
 app = Flask(__name__)
-app.config.from_object('config.settings')
+
+app.config.update(dict(
+    SECRET_KEY="powerful secretkey",
+    WTF_CSRF_SECRET_KEY="a csrf secret key",
+    WTF_CSRF_ENABLED=True,
+    DEBUG=True,
+    READER='reader.pickle'
+))
 
 
 def save_reader(reader):
@@ -33,7 +40,7 @@ def init_writer():
     g.writer = LabelWriter()
 
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def search():
     query_form = QueryForm()
     if query_form.validate_on_submit():
@@ -41,7 +48,7 @@ def search():
 
         save_reader(g.reader)
 
-        return redirect(url_for('label'))
+        return redirect(url_for('label_image'))
 
     for error in query_form.errors:
         print(error)
@@ -49,7 +56,7 @@ def search():
     return render_template('search.html', query_form=query_form)
 
 
-@app.route('/label', methods=['GET', 'POST'])
+@app.route('/labeling', methods=['GET', 'POST'])
 def label_image():
     image_url = None
 
