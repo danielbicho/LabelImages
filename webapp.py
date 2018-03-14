@@ -4,11 +4,17 @@ import pickle
 
 from flask import Flask, render_template, request, g, redirect, url_for
 
-from form import QueryForm
-from labeler import LabelWriter, ImageReaderSolr
+from form import QueryForm, InputPathForm
+from labeler import LabelWriter, ImageReaderSolr, ImageReaderFileSystem
 
 app = Flask(__name__)
-app.config.from_object('config.settings')
+#app.config.from_object('config.settings')
+app.config.update(dict(
+    SECRET_KEY="powerfull secretkey",
+    WTF_CSRF_SECRET_KEY="a csrf secret key",
+    WTF_CSRF_ENABLED=True,
+    READER='reader.pickle'
+))
 
 
 def save_reader(reader):
@@ -33,6 +39,17 @@ def init_writer():
     g.writer = LabelWriter()
 
 
+@app.route('/search_filesystem', methods=['GET', 'POST'])
+def search_folder():
+    input_path_form = InputPathForm()
+    if input_path_form.validate_on_submit():
+        g.reader = ImageReaderFileSystem(input_path_form.input_path.data)
+        save_reader(g.reader)
+        return redirect(url_for('label_image'))
+
+    return render_template('search_filesystem.html', filesystem_form=input_path_form)
+
+
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     query_form = QueryForm()
@@ -41,7 +58,7 @@ def search():
 
         save_reader(g.reader)
 
-        return redirect(url_for('label'))
+        return redirect(url_for('label_image'))
 
     for error in query_form.errors:
         print(error)

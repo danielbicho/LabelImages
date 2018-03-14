@@ -1,4 +1,5 @@
 import json
+import os
 
 import requests
 
@@ -18,6 +19,24 @@ class ImageReader:
 
     def next(self):
         raise NotImplementedError("Should have implemented this")
+
+
+class ImageReaderFileSystem(ImageReader):
+    def __init__(self, input_path='/home/dbicho/output'):
+        self.input_path = input_path
+        self.images = self.process()
+
+    def process(self):
+        file_list = []
+        for file in os.listdir(self.input_path):
+            file_list.append('file://' + os.path.join(self.input_path, file))
+        return file_list
+
+    def next(self):
+        if self.images:
+            return self.images.pop()
+        else:
+            return None
 
 
 class ImageReaderSolr(ImageReader):
@@ -72,6 +91,25 @@ class ImageReaderSolr(ImageReader):
                 return self.images.pop()
             else:
                 return None
+
+
+# class ImageReaderTextAPI(ImageReader):
+#     def __init__(self, api_endpoint='http://arquivo.pt/textsearch', query='*:*', offset=0):
+#         self.api_endpoint = api_endpoint
+#         self.query = query
+#         self.parameters = ""
+#         self.offset = offset
+#         self.total_number = 2000  # hardcoded because arquivo.pt limitations, open issue
+#         self.digest_set = set()
+#         self.images = self.process()
+#
+#     def process(self):
+#         r = requests.get("{}?{}&{}".format(self.api_endpoint, self.query, self.parameters))
+#         content = r.json()
+#         result_list = []
+#
+#     def next(self):
+#         pass
 
 
 # TODO generators cannot be persisted with pickle, how to use it in the webapp labeling logic?
