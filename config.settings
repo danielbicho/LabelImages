@@ -1,5 +1,0 @@
-SECRET_KEY = "powerful secretkey",
-WTF_CSRF_SECRET_KEY = "a csrf secret key",
-WTF_CSRF_ENABLED = True
-DEBUG = True
-READER = 'reader.pickle'

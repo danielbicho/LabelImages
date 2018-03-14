@@ -48,8 +48,7 @@ class ImageReaderSolr(ImageReader):
     def __init__(self, solr_collection='http://p28.arquivo.pt:8983/solr/Europe', query='*:*', start_number=0):
         self.solr_collection = solr_collection
         self.query = query
-        self.parameters = 'fl=imgWidth,mimeType,imgHeight,digest,imgSrc,timestamp,collection&group.field=digest \
-        &group=true&rows=1000'
+        self.parameters = 'fl=imgWidth,mimeType,imgHeight,digest,imgSrc,timestamp,collection&group.field=digest&group=true&rows=1000'
 
         self.solr_full_query = "{}/select?q={}&{}".format(self.solr_collection, self.query, self.parameters)
         self.start_number = start_number
